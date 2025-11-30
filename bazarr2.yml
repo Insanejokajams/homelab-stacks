@@ -1,0 +1,26 @@
+---
+
+services:
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr2
+    networks:
+      macvlan0:
+        ipv4_address: 10.24.24.96 # the IP of the container
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Mexico_City
+      - ServerIP=10.24.24.96
+    volumes:
+      - /srv/dev-disk-by-uuid-79a618dc-2955-4d54-b68e-650186fa473c/Docker/bazarr2:/config
+      - /srv/remotemount/MeabiMedia:/Media/
+      - /srv/dev-disk-by-uuid-79a618dc-2955-4d54-b68e-650186fa473c/Docker/bazarr2/config/update_script.sh:/usr/local/bin/update_script.sh
+    entrypoint: ["/bin/bash", "/usr/local/bin/update_script.sh"]
+    ports:
+      - 6868:6868
+    restart: unless-stopped
+
+networks:
+  macvlan0:   # externally created network
+    external: true

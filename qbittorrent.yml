@@ -1,0 +1,35 @@
+---
+
+services:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:5.0.1-r0-ls363
+    container_name: qbittorrent
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
+    networks:
+      macvlan0:
+        ipv4_address: 10.24.24.93 # the IP of the container
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Mexico_City
+      - WEBUI_PORT=9091
+      - ServerIP=10.24.24.93
+    volumes:
+      - /srv/dev-disk-by-uuid-79a618dc-2955-4d54-b68e-650186fa473c/Docker/qbittorrent:/config
+      - /srv/remotemount/MeabiMedia/:/Media/
+
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+      - 50772:50772
+      - 50772:50772/udp
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+    restart: unless-stopped
+
+networks:
+  macvlan0:   # externally created network
+    external: true

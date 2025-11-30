@@ -1,0 +1,36 @@
+# More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    hostname: pihole # set an easy hostname to remember
+    domainname: meabi # your local domain name
+    mac_address: de:ad:be:ef:ff:01 # can change or leave this
+    cap_add:
+      - NET_ADMIN
+    networks:
+      macvlan0: # same as network specified below
+        ipv4_address: 10.24.24.81 # the IP of the pihole container
+    dns:
+      - 10.24.24.1 # use local DNS, since the pihole 
+      - 1.1.1.1 # optional fallback DNS
+    ports: # expose all pihole ports.
+      - 443/tcp
+      - 53/tcp
+      - 53/udp
+      - 67/udp
+      - 80/tcp
+    volumes: # mount our data volumes.
+       - /srv/dev-disk-by-uuid-79a618dc-2955-4d54-b68e-650186fa473c/Docker/Pihole/etc/pihole/:/etc/pihole/
+       - /srv/dev-disk-by-uuid-79a618dc-2955-4d54-b68e-650186fa473c/Docker/Pihole/dnsmasq.d/:/etc/dnsmasq.d/
+       - /srv/dev-disk-by-uuid-79a618dc-2955-4d54-b68e-650186fa473c/Docker/Pihole/backups/:/backups/ # backups explained later
+    environment: # set variables for pihole configuration.
+      ServerIP: 10.24.24.81 # must match ipv4_address above
+      VIRTUAL_HOST: pihole.meabi  # Must be hostname + domainname from above
+      WEBPASSWORD: redmeabi
+      TZ: America/Mexico_City # pick your timezone
+    restart: unless-stopped
+    
+networks:
+  macvlan0:   # externally created network (later in article)
+    external: true

@@ -1,0 +1,20 @@
+version: "3"
+services:
+  watchtower:
+    image: containrrr/watchtower
+    networks:
+      macvlan0:
+        ipv4_address: 10.24.24.82 # the IP of the container
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - ServerIP=10.24.24.82 # must match ipv4_address above
+      - TZ=America/Mexico_City
+      - cleanup=true
+      - include-stopped=false
+    restart: unless-stopped
+
+networks:
+  macvlan0:   # externally created network
+    external: true

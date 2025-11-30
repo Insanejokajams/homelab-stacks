@@ -1,0 +1,25 @@
+
+
+services:
+  maintainerr:
+    image: ghcr.io/maintainerr/maintainerr:latest # or jorenn92/maintainerr:latest
+    container_name: maintainerr
+    networks:
+      macvlan0:
+        ipv4_address: 10.24.24.80 # the IP of the container
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Mexico_City
+      - ServerIP=10.24.24.80
+      #-  user: 1000:1000
+    volumes:
+      - /srv/dev-disk-by-uuid-79a618dc-2955-4d54-b68e-650186fa473c/Docker/maintainerr/opt/data:/opt/data
+#      - DEBUG=true # uncomment to enable debug logs
+    ports:
+      - 6246:6246
+    restart: unless-stopped
+
+networks:
+  macvlan0:   # externally created network
+    external: true

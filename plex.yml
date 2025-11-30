@@ -1,0 +1,33 @@
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    networks:
+      macvlan0: # same as network specified below
+        ipv4_address: 10.24.24.84 # the IP of the container
+    dns:
+      - 10.24.24.1 # use local DNS 
+     # - 1.1.1.1 # optional fallback DNS
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Mexico_City
+      - VERSION=docker
+      - PLEX_CLAIM=claim-x8qfTyXnc6bVGHqmHQsv
+      #- NVIDIA_VISIBLE_DEVICES=all
+      #- NVIDIA_DRIVER_CAPABILITIES compute,video,utility
+      - ADVERTISE_IP=10.24.24.84
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - /srv/dev-disk-by-uuid-79a618dc-2955-4d54-b68e-650186fa473c/Docker/Plex:/config
+      - /srv/remotemount/MeabiMedia/Multimedia:/Multimedia:ro
+      - /dev/shm:/transcode
+    ports:
+      - 32400:32400
+   # runtime: nvidia
+    restart: unless-stopped    
+    
+networks:
+  macvlan0:   # externally created network
+    external: true

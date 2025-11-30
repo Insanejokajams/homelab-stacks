@@ -1,0 +1,22 @@
+services:
+  readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    networks:
+      macvlan0:
+        ipv4_address: 10.24.24.97 # the IP of the container
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Mexico_City
+      - ServerIP=10.24.24.97
+    volumes:
+      - /srv/dev-disk-by-uuid-79a618dc-2955-4d54-b68e-650186fa473c/Docker/Readarr:/config
+      - /srv/remotemount/MeabiNAS/Media:/Media/
+    ports:
+      - 8787:8787
+    restart: unless-stopped
+
+networks:
+  macvlan0:   # externally created network
+    external: true

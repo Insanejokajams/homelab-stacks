@@ -1,0 +1,23 @@
+
+services:
+  recyclarr:
+    image: ghcr.io/recyclarr/recyclarr:latest
+    container_name: recyclarr
+    networks:
+      macvlan0:
+        ipv4_address: 10.24.24.91 # the IP of the container
+    volumes:
+      - /srv/dev-disk-by-uuid-79a618dc-2955-4d54-b68e-650186fa473c/Docker/recyclarr:/config
+    environment:
+      - TZ=America/Mexico_City
+      - PUID=1000
+      - PGID=1000
+      - ServerIP=10.24.24.91
+    #ports:
+     # - 7070:7070
+    restart: unless-stopped
+
+
+networks:
+  macvlan0:   # externally created network
+    external: true

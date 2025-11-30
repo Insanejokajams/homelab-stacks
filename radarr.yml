@@ -1,0 +1,23 @@
+
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr1080
+    networks:
+      macvlan0:
+        ipv4_address: 10.24.24.85 # the IP of the container
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Mexico_City
+      - ServerIP=10.24.24.85
+    volumes:
+      - /srv/dev-disk-by-uuid-79a618dc-2955-4d54-b68e-650186fa473c/Docker/Radarr:/config
+      - /srv/remotemount/MeabiMedia:/Media/
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+networks:
+  macvlan0:   # externally created network
+    external: true
