@@ -1,0 +1,6 @@
+# Ignorar archivos sensibles
+.env
+secrets/
+*.key
+*.pem
+*.crt
